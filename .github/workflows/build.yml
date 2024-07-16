@@ -1,0 +1,57 @@
+name: Build Zed for Windows
+
+on:
+  workflow_dispatch:
+
+jobs:
+  Build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@main
+
+    - name: Install .NET Core
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+
+    - name: Setup MSBuild.exe
+      uses: microsoft/setup-msbuild@v2
+
+    - name: Install Toolchain
+      run: rustup target add wasm32-wasi
+
+    - name: Build Executable
+      run: cargo run --release
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download executable
+        uses: actions/download-artifact@v3
+        with:
+          name: zed-windows-executable
+          path: ./release
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
+
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./release/zed-windows-executable.zip
+          asset_name: zed-windows-executable.zip
+          asset_content_type: application/zip
