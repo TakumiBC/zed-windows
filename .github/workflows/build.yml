@@ -35,7 +35,6 @@ jobs:
         
     - name: Upload Release Folder
       uses: actions/upload-artifact@main
-      if: steps.generate.outputs.GENERATE_STATUS == 'success'
       with:
         name: release
         path: zed/target/release
