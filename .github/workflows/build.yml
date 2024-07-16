@@ -31,35 +31,41 @@ jobs:
     - name: Build Executable
       run: |
         cd zed
-        cargo run --release
+        cargo build --release
+        
+    - name: Upload Release Folder
+      uses: actions/upload-artifact@main
+      if: steps.generate.outputs.GENERATE_STATUS == 'success'
+      with:
+        name: release
+        path: zed/target/release
+        
 
   release:
-    needs: build
+    needs: Build
     runs-on: ubuntu-latest
     steps:
-      - name: Download executable
-        uses: actions/download-artifact@v3
-        with:
-          name: zed-windows-executable
-          path: ./release
+      - name: Checkout
+        uses: actions/checkout@main
 
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
+      - name: Download Release Folder
+        uses: actions/download-artifact@v2
+        with:
+          name: release
+          path: zed/target/release     
+
+      - name: Generate Release Tag
+        id: tag
+        if: env.UPLOAD_RELEASE == 'true' && !cancelled()
+        run: |
+          echo "::set-output name=release_tag::$(date +"%Y.%m.%d")"
+          echo "::set-output name=release_date::$(date +"%Y.%m.%d")"     
+          
+      - name: Upload to Releases
+        uses: softprops/action-gh-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
-          draft: false
-          prerelease: false
-
-      - name: Upload Release Asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./release/zed-windows-executable.zip
-          asset_name: zed-windows-executable.zip
-          asset_content_type: application/zip
+          name: ${{ steps.tag.outputs.release_date }} Zed Windows
+          tag_name: ${{ steps.tag.outputs.release_tag }}
+          files: zed/target/release/zed.exe          
