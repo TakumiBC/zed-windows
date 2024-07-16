@@ -2,6 +2,9 @@ name: Build Zed for Windows
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: 0 16 * * *
+  
 
 jobs:
   Build:
@@ -48,10 +51,15 @@ jobs:
         uses: actions/checkout@main
 
       - name: Download Release Folder
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: release
-          path: zed/target/release     
+          path: zed/target/release
+
+      - name: Setup Git Environment
+        run: |
+          git config --global user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git config --global user.name github-actions[bot]
 
       - name: Generate Release Tag
         id: tag
@@ -61,7 +69,7 @@ jobs:
           echo "::set-output name=release_date::$(date +"%Y.%m.%d")"     
           
       - name: Upload to Releases
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
