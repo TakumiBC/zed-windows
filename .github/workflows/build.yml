@@ -35,12 +35,18 @@ jobs:
       run: |
         cd zed
         cargo build --release
+
+    - name: Compile Setup Wizzard
+      uses: Minionguyjpro/Inno-Setup-Action@v1.2.2
+      with:
+        path: Zed_Wizzard.iss
+        options: /O+        
         
-    - name: Upload Release Folder
+    - name: Upload Setup Wizzard
       uses: actions/upload-artifact@main
       with:
-        name: release
-        path: zed/target/release
+        name: setup
+        path: zed_setup.exe
         
 
   release:
@@ -53,7 +59,7 @@ jobs:
       - name: Download Release Folder
         uses: actions/download-artifact@v4
         with:
-          name: release
+          name: setup
           path: zed/target/release
 
       - name: Setup Git Environment
