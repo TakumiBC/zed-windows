@@ -11,7 +11,17 @@ This repository uses GitHub Actions to automatically fetch code from https://git
 
 I don't understand why Zed Industries dosen't release it's own Windows binary. Though it isn't complicated to compile, however this might be a big challenge for beginners.
 
+It is unclear why Zed Industries doesn't release its own Windows binary. While compiling the code is not complicated, it can be a significant challenge for beginners and it takes up a significant amount of time.
+
+
+
 ## Download
 
-Go to [Releases](https://github.com/TakumiBC/zed-windows/releases) and download the latest version of `zed.exe`. Run it on your Windows computer and it should start to operate.
+Go to [Releases](https://github.com/TakumiBC/zed-windows/releases) and download the latest version of `zed.exe`. Run `zed.exe` on your Windows computer to start the application.
+
+
+
+
+
+
 
