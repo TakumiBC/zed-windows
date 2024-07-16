@@ -2,9 +2,6 @@ name: Build Zed for Windows
 
 on:
   workflow_dispatch:
-env:
-  REPO_URL: https://github.com/zed-industries/zed
-  REPO_BRANCH: main
 
 jobs:
   Build:
@@ -29,7 +26,7 @@ jobs:
       run: |
         git config --global user.email 41898282+github-actions[bot]@users.noreply.github.com
         git config --global user.name github-actions[bot]
-        git clone $REPO_URL -b $REPO_BRANCH zed
+        git clone https://github.com/zed-industries/zed -b main zed
 
     - name: Build Executable
       run: |
