@@ -17,7 +17,7 @@ It is unclear why Zed Industries doesn't release its own Windows binary. While c
 
 ## Download
 
-Go to [Releases](https://github.com/TakumiBC/zed-windows/releases) and download the latest version of `zed.exe`. Run `zed.exe` on your Windows computer to start the application.
+Go to [Releases](https://github.com/TakumiBC/zed-windows/releases) and download the latest version of `zed_setup.exe`. Run `zed_setup.exe` on your Windows computer and follow the instructions from the setup wizard. Afterwards, you should be able to run Zed.
 
 
 
