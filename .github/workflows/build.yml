@@ -58,7 +58,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: setup
-          path: zed/target/release
+          path: zed_setup.exe
 
       - name: Setup Git Environment
         run: |
@@ -67,7 +67,6 @@ jobs:
 
       - name: Generate Release Tag
         id: tag
-        if: env.UPLOAD_RELEASE == 'true' && !cancelled()
         run: |
           echo "::set-output name=release_tag::$(date +"%Y.%m.%d")"
           echo "::set-output name=release_date::$(date +"%Y.%m.%d")"     
@@ -79,4 +78,4 @@ jobs:
         with:
           name: ${{ steps.tag.outputs.release_date }} Zed Windows
           tag_name: ${{ steps.tag.outputs.release_tag }}
-          files: zed/target/release/zed.exe          
+          files: zed_setup.exe          
