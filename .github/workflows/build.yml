@@ -78,4 +78,4 @@ jobs:
         with:
           name: ${{ steps.tag.outputs.release_date }} Zed Windows
           tag_name: ${{ steps.tag.outputs.release_tag }}
-          files: Output\zed_setup.exe          
+          files: Output/zed_setup.exe
