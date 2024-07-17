@@ -36,13 +36,13 @@ jobs:
         cd zed
         cargo build --release
 
-    - name: Compile Setup Wizzard
+    - name: Compile Setup Wizard
       uses: Minionguyjpro/Inno-Setup-Action@v1.2.2
       with:
-        path: Zed_Wizzard.iss
-        options: /O+        
+        path: zed_wizard.iss
+        options: /O+
         
-    - name: Upload Setup Wizzard
+    - name: Upload Setup Wizard
       uses: actions/upload-artifact@main
       with:
         name: setup
