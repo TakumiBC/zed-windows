@@ -41,7 +41,7 @@ jobs:
         options: /O+
         
     - name: Upload Setup Wizard
-    - uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v4
       with:
         name: setup
         path: Output\zed_setup.exe
