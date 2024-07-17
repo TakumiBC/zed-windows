@@ -45,7 +45,7 @@ jobs:
       with:
         name: setup
         path: Output\zed_setup.exe
-        
+
 
   Upload:
     needs: Build
@@ -58,7 +58,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: setup
-          path: zed_setup.exe
+          path: Output
 
       - name: Setup Git Environment
         run: |
@@ -78,4 +78,4 @@ jobs:
         with:
           name: ${{ steps.tag.outputs.release_date }} Zed Windows
           tag_name: ${{ steps.tag.outputs.release_tag }}
-          files: zed_setup.exe          
+          files: Output\zed_setup.exe          
