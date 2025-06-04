@@ -2,12 +2,38 @@ name: Build Zed for Windows
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: 0 16 * * *
 
 
 jobs:
+  Check:
+    runs-on: ubuntu-latest
+    outputs:
+      should_run: ${{ steps.check.outputs.should_run }}
+      tag: ${{ steps.check.outputs.tag }}
+    steps:
+      - name: Check Latest Releases
+        id: check
+        run: |
+          zed_tag=$(echo $(curl -s https://api.github.com/repos/zed-industries/zed/releases/latest) | jq -r '.tag_name')
+          prerelease=$(echo $(curl -s https://api.github.com/repos/zed-industries/zed/releases/latest) | jq -r '.prerelease')
+          echo "Latest Zed Release: $zed_tag (prerelease: $prerelease)"
+          win_tag=$(echo $(curl -s https://api.github.com/repos/TakumiBC/zed-windows/releases/latest) | jq -r '.tag_name')
+          echo "Latest Windows Release: $win_tag"
+          if [[ "$zed_tag" != "$win_tag" && "$prerelease" == "false" ]]; then
+            echo "New valid release $zed_tag found!"
+            echo "should_run=true" >> $GITHUB_OUTPUT
+            echo "tag=$zed_tag" >> $GITHUB_OUTPUT
+          else
+            echo "No new valid release"
+            echo "should_run=false" >> $GITHUB_OUTPUT
+          fi
+          
   Build:
+    needs: [Check]
+    if: needs.check-new-release.outputs.should_run == 'true'
     runs-on: windows-latest
-
     steps:
     - name: Checkout
       uses: actions/checkout@main
@@ -47,9 +73,9 @@ jobs:
         name: setup
         path: Output\zed_setup.exe
 
-
   Upload:
-    needs: Build
+    needs: [Build]
+    if: needs.check-new-release.outputs.should_run == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -65,18 +91,12 @@ jobs:
         run: |
           git config --global user.email 41898282+github-actions[bot]@users.noreply.github.com
           git config --global user.name github-actions[bot]
-
-      - name: Generate Release Tag
-        id: tag
-        run: |
-          echo "::set-output name=release_tag::$(date +"%Y.%m.%d")"
-          echo "::set-output name=release_date::$(date +"%Y.%m.%d")"     
           
       - name: Upload to Releases
         uses: softprops/action-gh-release@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          name: ${{ steps.tag.outputs.release_date }} Zed Windows
-          tag_name: ${{ steps.tag.outputs.release_tag }}
+          name: ${{ steps.check.outputs.tag }}
+          tag_name: ${{ steps.check.outputs.tag }}
           files: Output/zed_setup.exe
