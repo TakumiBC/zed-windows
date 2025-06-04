@@ -74,7 +74,7 @@ jobs:
         path: Output\zed_setup.exe
 
   Upload:
-    needs: Build
+    needs: [Check, Build]
     if: needs.check-new-release.outputs.should_run == 'true'
     runs-on: ubuntu-latest
     steps:
@@ -97,6 +97,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          name: ${{ jobs.Check.steps.check.outputs.tag }}
-          tag_name: ${{ jobs.Check.steps.check.outputs.tag }}
+          name: ${{ needs.Check.steps.check.outputs.tag }}
+          tag_name: ${{ needs.Check.steps.check.outputs.tag }}
           files: Output/zed_setup.exe
