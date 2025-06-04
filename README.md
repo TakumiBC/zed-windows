@@ -1,7 +1,6 @@
 <div align="center">
-  <img src="https://zed.dev/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fapp-logo2.9b5f959f.png&w=640&q=75" width="150" />
+  <img src="https://upload.wikimedia.org/wikipedia/commons/1/16/Zed_Editor_Logo.png" width="150" />
   <h1>Zed Windows</h1>
-  English | <a href="https://github.com/TakumiBC/zed-windows/blob/main/README_CN.md">简体中文</a>
 </div>
 <br>
 
