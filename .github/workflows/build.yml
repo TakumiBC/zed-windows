@@ -32,7 +32,7 @@ jobs:
           
   Build:
     needs: [Check]
-    if: needs.Check.should_run == 'true'
+    if: needs.Check.steps.check.outputs.should_run == 'true'
     runs-on: windows-latest
     steps:
     - name: Checkout
@@ -75,7 +75,7 @@ jobs:
 
   Upload:
     needs: [Check, Build]
-    if: needs.Check.should_run == 'true'
+    if: needs.Check.steps.check.outputs.should_run == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
