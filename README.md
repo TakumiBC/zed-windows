@@ -4,6 +4,7 @@
 </div>
 
 This project is broken and no longer maintained. Use https://github.com/deevus/zed-windows-builds instead.
+
 ~~This repository uses GitHub Actions to automatically fetch code from https://github.com/zed-industries/zed and compile a Windows version of [Zed](https://zed.dev/).~~
 
 ## ~~Purpose~~
